@@ -5,3 +5,6 @@ from . import models
 
 def analisis(request):
     return render(request, "mortalysis/analisis.html", {})
+
+def index(request):
+    return render(request, "mortalysis/index.html", {})
