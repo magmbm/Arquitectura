@@ -2,65 +2,92 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # Create your models here.
+class Region(models.Model):
+    id_region = models.IntegerField(primary_key=True)
+    nombre_region = models.CharField(max_length=45, null=False, blank=False)
 
-class REGION(models.Model):
-    id_region= models.IntegerField(primary_key= True)
-    nombre= models.CharField(max_length= 45)
+    def __str__(self):
+        return str(self.nombre_region)
 
-class COMUNA(models.Model):
-    id_comuna= models.IntegerField(primary_key= True)
-    nombre= models.CharField(max_length=60)
-    region_FK= models.ForeignKey(REGION, on_delete=models.CASCADE)
+class Comuna(models.Model):
+    id_comuna = models.IntegerField(primary_key=True)
+    nombre_comuna = models.CharField(max_length=60, null=False, blank=False)
+    FK_id_region = models.ForeignKey(Region, on_delete=models.CASCADE, default=1, db_column='id_region')
 
-class USUARIO(models.Model):
-    usuario_FK= models.OneToOneField(User, primary_key= True, on_delete=models.CASCADE)
-    nombre= models.CharField(max_length=60, null=False)
-    s_nombre= models.CharField(max_length= 60, null= True)
-    appaterno= models.CharField(max_length= 60, null= False)
-    apmaterno= models.CharField(max_length= 60, null= False)
+    def __str__(self):
+        return str(self.nombre_comuna)
 
+class CausaIngreso(models.Model):
+    id_causa_ingreso = models.IntegerField(primary_key=True)
+    descripcion_causa_ingreso = models.CharField(max_length=80, null=False, blank=False)
 
-class CAUSA_MUERTE(models.Model):
-    id_causa_muerte= models.IntegerField(primary_key= True)
-    causa_desc= models.CharField(max_length= 80)
+    def __str__(self):
+        return str(self.descripcion_causa_ingreso)
 
-class CENTRO_MEDICO(models.Model):
-    id_centro_med= models.IntegerField(primary_key= True) 
-    nombre= models.CharField(max_length= 80)
-    direccion= models.CharField(max_length= 60)
-    comuna_FK= models.ForeignKey(COMUNA, on_delete=models.CASCADE)
+class ErrorMortal(models.Model):
+    id_error_mortal = models.IntegerField(primary_key=True)
+    descripcion_error_mortal = models.CharField(max_length=80, null=False, blank=False)
 
-class PERSONAL_MEDICO(models.Model):
-    id_personal= models.IntegerField(primary_key= True)
-    nombre= models.CharField(max_length= 60)
-    s_nombre= models.CharField(max_length= 60)
-    appaterno= models.CharField(max_length= 60)
-    apmaterno= models.CharField(max_length= 60)
-    numrut= models.IntegerField(max_length= 11)
-    dvrut= models.CharField(max_length= 1)
-    profesion= models.CharField(max_length= 50)
-    edad= models.IntegerField()
-    anios_de_trabajo= models.IntegerField()
-    anios_en_el_centro= models.IntegerField()
-    centro_medico_FK= models.ForeignKey(CENTRO_MEDICO, on_delete=models.CASCADE)
+    def __str__(self):
+        return str(self.descripcion_error_mortal)
 
-class PACIENTE(models.Model):
-    id_paciente= models.IntegerField(primary_key= True)
-    p_nombre= models.CharField(max_length= 60)
-    s_nombre= models.CharField(max_length= 60)
-    appaterno= models.CharField(max_length= 60)
-    apmaterno= models.CharField(max_length= 60)
-    numrut= models.IntegerField(max_length= 11)
-    dvrut= models.CharField(max_length= 1)
-    edad= models.IntegerField(max_length= 120)
-    genero= models.CharField(max_length= 1)
-    comuna_FK= models.ForeignKey(COMUNA, on_delete=models.CASCADE)
+class CentroMedico(models.Model):
+    id_centro_medico = models.IntegerField(primary_key=True)
+    nombre_centro_med = models.CharField(max_length=80, null=False, blank=False)
+    direccion_centro_med = models.CharField(max_length=60, null=False, blank=False)
+    FK_id_comuna = models.ForeignKey(Comuna, on_delete=models.CASCADE, default=1, db_column='id_comuna')
 
-class DEFUNCION(models.Model):
-    id_defuncion= models.IntegerField(primary_key= True)
-    hora_muerte= models.TimeField(null= True)
-    dia_muerte= models.DateField()
-    paciente= models.ForeignKey(PACIENTE, on_delete=models.CASCADE)
-    personal_medico= models.ForeignKey(PERSONAL_MEDICO, on_delete=models.CASCADE)
-    centro_medico= models.ForeignKey(CENTRO_MEDICO, on_delete=models.CASCADE) 
-    causa_muerte= models.ForeignKey(CAUSA_MUERTE, on_delete=models.CASCADE)
+    def __str__(self):
+        return str(self.nombre_centro_med)
+
+class PersonalMedico(models.Model):
+    id_personal_med = models.IntegerField(primary_key=True)
+    numrut_pers_med = models.IntegerField(null=False, blank=False, default=0)
+    dvrut_pers_med = models.CharField(max_length=1, null=False, blank=False)
+    p_nombre_pers_med = models.CharField(max_length=60, null=False, blank=False)
+    s_nombre_pers_med = models.CharField(max_length=60, null= True)
+    a_paterno_pers_med = models.CharField(max_length=60, null=False, blank=False)
+    a_materno_pers_med = models.CharField(max_length=60, null=False, blank=False)
+    cargo_pers_med = models.CharField(max_length=50, null=False, blank=False)
+    edad_pers_med = models.IntegerField(null=False, blank=False, default=0)
+    anios_experienca = models.IntegerField(null=False, blank=False, default=0)
+    FK_id_centro_medico = models.ForeignKey(CentroMedico, on_delete=models.CASCADE, default=1, db_column='id_centro_medico')
+
+    def __str__(self):
+        return f"{self.p_nombre_pers_med} {self.a_paterno_pers_med} {self.a_materno_pers_med}"
+
+class Paciente(models.Model):
+    id_paciente = models.IntegerField(primary_key=True)
+    numrut_paciente = models.IntegerField(null=False, blank=False, default=0)
+    dvrut_paciente = models.CharField(max_length=1, null=False, blank=False)
+    p_nombre_paciente = models.CharField(max_length=60, null=False, blank=False)
+    s_nombre_paciente = models.CharField(max_length=60, null=False, blank=False)
+    a_paterno_paciente = models.CharField(max_length=60, null=False, blank=False)
+    a_materno_paciente = models.CharField(max_length=60, null=False, blank=False)
+    edad_paciente = models.IntegerField(null=False, blank=False, default=0)
+    genero_paciente = models.CharField(max_length=1, null=False, blank=False)
+    FK_id_comuna = models.ForeignKey(Comuna, on_delete=models.CASCADE, default=1, db_column='id_comuna')
+
+    def __str__(self):
+        return f"{self.p_nombre_paciente} {self.a_paterno_paciente} {self.a_materno_paciente}"
+
+class Defuncion(models.Model):
+    id_defuncion = models.IntegerField(primary_key=True)
+    hora_defuncion = models.TimeField(null=True)
+    fecha_defuncion = models.DateField(null=False, blank=False)
+    FK_id_paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, default=1, db_column='id_paciente')
+    FK_id_personal_medico = models.ForeignKey(PersonalMedico, on_delete=models.CASCADE, default=1, db_column='id_personal_medico')
+    FK_id_causa_ingreso = models.ForeignKey(CausaIngreso, on_delete=models.CASCADE, default=1, db_column='id_causa_ingreso')
+    FK_id_error_mortal = models.ForeignKey(ErrorMortal, on_delete=models.CASCADE, default=1, db_column='id_error_mortal')
+    FK_id_centro_medico = models.ForeignKey(CentroMedico, on_delete=models.CASCADE, default=1, db_column='id_centro_medico')
+
+    def __str__(self):
+        return f"Defunción {self.id_defuncion} - {self.FK_id_paciente}"
+
+# Uncomment and update if needed
+# class USUARIO(models.Model):
+#     usuario_FK = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
+#     nombre = models.CharField(max_length=60, null=False)
+#     s_nombre = models.CharField(max_length=60, null=True)
+#     appaterno = models.CharField(max_length=60, null=False)
+#     apmaterno = models.CharField(max_length=60, null=False)

@@ -3,11 +3,12 @@ from . import models
 
 # Register your models here.
 
-admin.site.register(models.USUARIO)
-admin.site.register(models.CAUSA_MUERTE)
-admin.site.register(models.CENTRO_MEDICO)
-admin.site.register(models.COMUNA)
-admin.site.register(models.REGION)
-admin.site.register(models.DEFUNCION)
-admin.site.register(models.PACIENTE)
-admin.site.register(models.PERSONAL_MEDICO)
+#admin.site.register(models.USUARIO)
+admin.site.register(models.Region)
+admin.site.register(models.Comuna)
+admin.site.register(models.CausaIngreso)
+admin.site.register(models.ErrorMortal)
+admin.site.register(models.CentroMedico)
+admin.site.register(models.PersonalMedico)
+admin.site.register(models.Paciente)
+admin.site.register(models.Defuncion)
