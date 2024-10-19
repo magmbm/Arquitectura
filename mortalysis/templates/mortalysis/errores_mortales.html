@@ -1,0 +1,58 @@
+{% extends "mortalysis/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+    <header>
+      <div class="row justify-content-center">
+        <div class="col-md-8 col-sm-12">
+          <h1>Listado de Errores Mortales</h1>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <div class="container-btn">
+            <button class="btn btn-light" id="btnAgregar">
+              <a href="{% url 'registrar_error_mortal' %}">Registrar Error Mortal</a>
+            </button>
+          </div>
+        </div>
+      </div>   
+    </header>
+
+    <div id="idMensajes">
+      {% if mensaje %}
+          <div class="alert alert-warning mx-auto">
+              {{ mensaje }}
+          </div>
+      {% endif %}
+    </div>
+
+    <div class="table-container">
+        <table class="table table-striped">
+            {% if errores_mortales %}
+                <thead>
+                    <tr>
+                    <th scope="col">Descripción</th>
+                    <th scope="col" colspan="2">Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for error in errores_mortales %}
+                        <tr>
+                            <td>{{ error.descripcion_error_mortal }}</td>
+                            <td class="td-update"><a href="{% url 'editar_error_mortal' pk=error.id_error_mortal %}">Modificar</a></td>
+                            <td class="td-delete"><a href="{% url 'eliminar_error_mortal' pk=error.id_error_mortal %}">Eliminar</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            {% endif %}    
+        </table>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $("#idMensajes").delay(2000).fadeOut("slow");
+        });
+    </script>
+
+{% endblock %}

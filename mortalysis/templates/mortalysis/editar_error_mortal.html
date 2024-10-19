@@ -1,0 +1,46 @@
+{% extends "mortalysis/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+  <br>
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-10 col-sm-12">
+        <div id="formCrud" class="p-4 border rounded">
+          <h2 class="text-center">Modificar Error Mortal:</h2>
+          <br />
+
+          <form action="" method="POST" class="form-horizontal">
+            {% csrf_token %}
+
+            <div class="form-row justify-content-center">
+              <div class="form-group col-md-8">
+                {{ form.non_field_errors }}
+                <label for="{{ form.descripcion_error_mortal.id_for_label }}">
+                  {{ form.descripcion_error_mortal.label }}
+                </label>
+                {{ form.descripcion_error_mortal }} 
+                {{ form.descripcion_error_mortal.errors }}
+              </div>
+
+            </div>
+
+            <br />
+            <div class="form-group text-center">
+              <button type="submit" class="btn btn-primary" id="btnEnviarForm">Actualizar</button>
+              <a href="{% url 'errores_mortales' %}" class="btn btn-secondary" id="btnVolver">Volver</a>
+            </div>
+          </form>
+
+          <div id="idMensajes">
+            {% if mensaje %}
+              <div class="alert alert-success mx-auto">{{ mensaje }}</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+{% endblock %}

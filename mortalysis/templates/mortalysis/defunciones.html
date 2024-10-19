@@ -1,0 +1,67 @@
+{% extends "mortalysis/base.html" %}
+{% load static %}
+
+{% block content %}
+<header>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-sm-12">
+            <h1>Listado de Defunciones</h1>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div class="container-btn">
+                <button class="btn btn-light" id="btnAgregar">
+                    <a href="{% url 'registrar_defuncion' %}">Registrar Defunción</a>
+                </button>
+            </div>
+        </div>
+    </div>   
+</header>
+
+<div id="idMensajes">
+    {% if mensaje %}
+        <div class="alert alert-warning mx-auto">
+            {{ mensaje }}
+        </div>
+    {% endif %}
+</div>
+
+<div class="table-container">
+    <table class="table table-striped">
+        {% if defunciones %}
+            <thead>
+                <tr>
+                    <th scope="col">Fecha Defunción</th>
+                    <th scope="col">Hora Defunción</th>
+                    <th scope="col">Paciente</th>
+                    <th scope="col">Personal Involucrado</th>
+                    <th scope="col">Centro Médico</th>
+                    <th scope="col">Causa de Ingreso</th>
+                    <th scope="col">Error Mortal</th>
+                    <th scope="col" colspan="2">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for defuncion in defunciones %}
+                    <tr>
+                        <td>{{ defuncion.fecha_defuncion }}</td>
+                        <td>{{ defuncion.hora_defuncion }}</td>
+                        <td>{{ defuncion.FK_id_paciente }}</td>
+                        <td>{{ defuncion.FK_id_personal_medico }}</td>
+                        <td>{{ defuncion.FK_id_centro_medico }}</td>
+                        <td>{{ defuncion.FK_id_causa_ingreso }}</td>
+                        <td>{{ defuncion.FK_id_error_mortal }}</td>
+                        <td class="td-update"><a href="{% url 'editar_defuncion' pk=defuncion.id_defuncion %}">Modificar</a></td>
+                        <td class="td-delete"><a href="{% url 'eliminar_defuncion' pk=defuncion.id_defuncion %}">Eliminar</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        {% endif %}    
+    </table>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $("#idMensajes").delay(2000).fadeOut("slow");
+    });
+</script>
+{% endblock %}

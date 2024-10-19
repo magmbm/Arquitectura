@@ -1,0 +1,61 @@
+{% extends "mortalysis/base.html" %}
+{% load static %}
+
+{% block content %}
+    <header>
+      <div class="row justify-content-center">
+        <div class="col-md-8 col-sm-12">
+          <h1>Listado de Pacientes</h1>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <div class="container-btn">
+            <button class="btn btn-light" id="btnAgregar">
+              <a href="{% url 'agregar_paciente' %}">Registrar Paciente</a>
+            </button>
+          </div>
+        </div>
+      </div>   
+    </header>
+
+    <div id="idMensajes">
+      {% if mensaje %}
+          <div class="alert alert-warning mx-auto">
+              {{ mensaje }}
+          </div>
+      {% endif %}
+    </div>
+
+    <div class="table-container">
+        <table class="table table-striped">
+            {% if pacientes %}
+                <thead>
+                    <tr>
+                    <th scope="col">Nombre Completo</th>
+                    <th scope="col">RUT</th>
+                    <th scope="col">Edad</th>
+                    <th scope="col">Género</th>
+                    <th scope="col" colspan="2">Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for paciente in pacientes %}
+                        <tr>
+                            <td>{{ paciente.p_nombre_paciente }} {{ paciente.a_paterno_paciente }} {{ paciente.a_materno_paciente }}</td>
+                            <td>{{ paciente.numrut_paciente }}-{{ paciente.dvrut_paciente }}</td>
+                            <td>{{ paciente.edad_paciente }}</td>
+                            <td>{{ paciente.genero_paciente }}</td>
+                            <td class="td-update"><a href="{% url 'editar_paciente' pk=paciente.id_paciente %}">Modificar</a></td>
+                            <td class="td-delete"><a href="{% url 'eliminar_paciente' pk=paciente.id_paciente %}">Eliminar</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            {% endif %}    
+        </table>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $("#idMensajes").delay(2000).fadeOut("slow");
+        });
+    </script>
+{% endblock %}
