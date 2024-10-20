@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from . import models
 
+
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import ErrorMortal, Paciente, Defuncion
 from .forms import ErrorMortalForm, PacienteForm, DefuncionForm
@@ -8,9 +9,13 @@ from .forms import ErrorMortalForm, PacienteForm, DefuncionForm
 # Create your views here.
 
 def analisis(request):
-    return render(request, "mortalysis/analisis.html", {})
+    if request.method== "GET":
+        context={
+        }
+        return render(request, "mortalysis/analisis.html", context)
 
 def index(request):
+
     return render(request, "mortalysis/index.html", {})
 
 # Listar Errores Mortales
