@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from . import models
 
+from .service import get_region, get_comuna, cursor, get_centro_medico
+
 
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import ErrorMortal, Paciente, Defuncion
@@ -16,8 +18,15 @@ def analisis(request):
         return render(request, "mortalysis/analisis.html", context)
 
 def index(request):
+    try:
+        get_region()
+        get_comuna()
+        get_centro_medico()
+        cursor.close()
+    except:
+        print("Error")
     context = {
-        'clase':'index'
+        'clase':'index',
     }
     return render(request, "mortalysis/index.html", context)
 
