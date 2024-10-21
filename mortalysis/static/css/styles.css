@@ -1,0 +1,273 @@
+/* Estilos básicos para Mortalysis */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: lightgray; /* Color de fondo claro */
+}
+
+/* Estilos personalizados para el Navbar */
+
+.navbar {
+    background-color: #F89043 !important; /* Fondo blanco para el navbar */
+    padding: 15px; /* Espaciado */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para efecto de profundidad */
+}
+
+.navbar-brand {
+    font-size: 35px;
+    font-weight: bold;
+    color: #06728B !important; /* Color del título del proyecto */
+}
+
+.navbar-brand:hover {
+    color: #0056b3 !important; /* Color al pasar el mouse */
+}
+
+.nav-link {
+    font-size: 20px;
+    margin-left: 10px;
+    color: #06728B !important; /* Color del texto de los links */
+    transition: color 0.2s ease-in-out;
+}
+
+.nav-link:hover {
+    color: #0056b3 !important; /* Color al pasar el mouse sobre los links */
+}
+
+.nav-item.active .nav-link {
+    color: #06728B; /* Color para la página activa */
+    font-weight: bold; /* Negrita para el link activo */
+}
+
+.nav-item .nav-link.disabled {
+    color: white !important; /* Color más claro para reflejar que está deshabilitado */
+    cursor: not-allowed; /* Mostrar el icono de 'no permitido' */
+    pointer-events: none; /* Desactivar la interacción del mouse */
+    font-style: italic; /* Opcional: estilo en cursiva para diferenciarlo aún más */
+    opacity: 0.6; /* Reducir la opacidad para dar un aspecto apagado */
+}
+
+.navbar-toggler {
+    border-color: #06728B; /* Color del borde del botón de colapso */
+}
+
+.navbar-toggler-icon {
+    background-color: #06728B; /* Color del icono de la hamburguesa (menú en móvil) */
+}
+
+/* Dropdown custom styles */
+.dropdown-menu {
+    background-color: #F89043 !important;
+    border-radius: 4px;
+}
+
+.dropdown-item {
+    color: #06728B !important;
+    padding: 10px 20px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.dropdown-item:hover {
+    background-color: #e9a775 !important;;
+}
+
+.dropdown-item.disabled {
+    color: white !important; /* Color más claro para reflejar que está deshabilitado */
+    cursor: not-allowed; /* Mostrar el icono de 'no permitido' */
+    pointer-events: none; /* Desactivar la interacción del mouse */
+    font-style: italic; /* Opcional: estilo en cursiva para diferenciarlo aún más */
+    opacity: 0.6; /* Reducir la opacidad para dar un aspecto apagado */
+}
+
+/* Ajustes en pantallas pequeñas */
+@media (max-width: 768px) {
+    .navbar-nav {
+        text-align: center;
+    }
+
+    .nav-link {
+        padding: 10px 0;
+    }
+}
+
+footer {
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    text-align: center;
+    background-color: #06728B !important;
+    color: white !important;
+    margin: 0;
+}
+
+
+.container {
+    max-width: 900px;
+    margin: 0 auto; /* Centramos el contenedor */
+    padding: 20px;
+}
+
+.mt-5 {
+    margin-top: 3rem; /* Márgen superior para separar del navbar */
+}
+
+.text-center {
+    text-align: center;
+}
+
+.display-4 {
+    font-size: 3rem; /* Tamaño grande para el mensaje de bienvenida */
+    font-weight: bold;
+}
+
+.lead {
+    font-size: 1.25rem; /* Tamaño más grande para la descripción */
+    margin-top: 20px;
+    color: #555; /* Color de texto más suave */
+}
+
+img {
+    max-width: 100%; /* Imagen fluida */
+    height: auto;
+    margin-top: 2rem; /* Separación de la imagen del subtítulo */
+}
+
+@media (max-width: 768px) {
+    .display-4 {
+        font-size: 2.5rem; /* Ajuste para pantallas pequeñas */
+    }
+    
+    .lead {
+        font-size: 1.1rem;
+    }
+}
+
+.barra_superior{
+    background-color: #06728B;
+    height: auto;
+    width: 100%;
+    padding: 10px;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Mantenedores */
+.table-container {
+    overflow-x:auto;
+    margin-top: 3%;
+    margin-right: 7%;
+    margin-left: 7%;
+    margin-bottom: 3%;
+  }
+  
+  .table-striped {
+    background-color: azure;
+    border: 2px solid black;
+    text-align: center;
+  }
+  
+  .table-striped th {
+    font-size: 18px;
+    background-color: rgba(1, 18, 26, 0.836);
+    color: white;
+  }
+  
+  .table-striped th, .table-striped td {
+    border: 1px solid black !important;
+  }
+
+  .table-striped .td-update {
+    background-color: rgb(248, 248, 152);
+  }
+  
+  .table-striped .td-update a {
+    color: #06728B;
+    font-weight: bold;
+    text-decoration: underline;
+  }
+  
+  .table-striped .td-delete {
+    background-color: rgb(206, 62, 62);
+  }
+  
+  .table-striped .td-delete a {
+    color: white;
+    font-weight: bold;
+    text-decoration: underline;
+  }
+
+  #btnAgregar {
+    background-color: white;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px;
+  }
+
+  #btnAgregar a {
+    color: #1f6304 !important;
+  }
+
+  #formCrud {
+    background-color: white;
+    color: #06728B;
+    font-weight: 500;
+    margin: 5%;
+  }
+
+  #formCrud h2 {
+    font-size: 40px;
+    font-weight: bold;
+    text-decoration: underline;
+  }
+
+  #btnEnviarForm, #btnVolver {
+    width: 30%;
+    margin-left: 2%;
+    margin-right: 2%;
+    font-weight: 700;
+    font-size: 20px;
+  }
+
+  #btnEnviarForm {
+    background-color: #06728B;
+  }
+
+
+/* Análisis de Datos de Defunciones*/
+
+.down-cont{
+    display: flex;
+    justify-content: space-between;
+}
+
+.barra_control_lateral{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 330px;
+    background-color: #F89043;
+}
+
+.var-select{
+    width: 170px;
+    display: flex;
+    justify-content: center;
+    margin: 10px 5px 10px 5px;
+}
+
+.opciones{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; 
+}
+
+.graphic{
+    background-color: lightgrey;
+    display: flex;
+    width: 100%;
+    justify-content: end;
+}

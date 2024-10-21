@@ -1,20 +1,25 @@
 {% extends "mortalysis/base.html" %}
+
 {% load static %}
 
 {% block content %}
     <header>
-      <div class="row justify-content-center">
-        <div class="col-md-8 col-sm-12">
-          <h1>Listado de Pacientes</h1>
-        </div>
-        <div class="col-md-4 col-sm-12">
-          <div class="container-btn">
-            <button class="btn btn-light" id="btnAgregar">
-              <a href="{% url 'agregar_paciente' %}">Registrar Paciente</a>
-            </button>
+
+      <div class="barra_superior">
+        <div class="row justify-content-center">
+          <div class="col-md-8 col-sm-12">
+            <h1>Listado de Pacientes</h1>
           </div>
+          <div class="col-md-4 col-sm-12">
+            <div class="container-btn">
+              <button class="btn btn-light" id="btnAgregar">
+                <a href="{% url 'agregar_paciente' %}">Registrar Paciente</a>
+              </button>
+            </div>
+          </div>
+        </div>   
         </div>
-      </div>   
+      
     </header>
 
     <div id="idMensajes">

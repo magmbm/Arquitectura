@@ -28,8 +28,8 @@
           crossorigin="anonymous"
         ></script>
     
-        <!-- Mi hoja de estilos CSS 
-        <link rel="stylesheet" href="{% static 'css/styles.css' %}" />-->
+        <!-- Mi hoja de estilos CSS -->
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
     
         <!-- Mi archivo JS 
         <script src="{% static 'js/main.js' %}"></script>-->
@@ -37,6 +37,58 @@
       </head>
 <body>
     
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{% url 'index' %}">MORTALYSIS</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            <!-- Inicio -->
+            {% if clase == 'index' %}
+            <li class="nav-item active">
+            {% else %}
+            <li class="nav-item">
+            {% endif %}
+                <a class="nav-link" href="{% url 'index' %}">Inicio</a>
+            </li>
+
+            <!-- Mantenedores Dropdown -->
+            {% if clase == 'mantenedores' %}
+            <li class="nav-item dropdown active">
+            {% else %}
+            <li class="nav-item dropdown">
+            {% endif %}
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Mantenedores
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item disabled" href="#">Mantenedor de Personal Médico</a>
+                    <a class="dropdown-item" href="{% url 'pacientes' %}">Mantenedor de Pacientes</a>
+                    <a class="dropdown-item disabled" href="#">Mantenedor de Causas de Ingreso</a>
+                    <a class="dropdown-item" href="{% url 'errores_mortales' %}">Mantenedor de Errores Mortales</a>
+                    <a class="dropdown-item" href="{% url 'defunciones' %}">Mantenedor de Defunciones</a>
+                </div>
+            </li>
+
+            <!-- Análisis de Defunciones -->
+            {% if clase == 'analisis' %}
+            <li class="nav-item active">
+            {% else %}
+            <li class="nav-item">
+            {% endif %}
+                <a class="nav-link" href="analisis">Análisis de Defunciones</a>
+            </li>
+
+            <!-- Cerrar Sesión -->
+            <li class="nav-item">
+                <a class="nav-link disabled" href="#">Cerrar Sesión</a>
+            </li>
+        </ul>
+    </div>
+  </nav>
+
 
     {% block content %}{% endblock %}
 
