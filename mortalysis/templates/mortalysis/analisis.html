@@ -7,44 +7,63 @@
         <h1>Análisis de Defunciones</h1>
     </div>
     <div class="down-cont">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="barra_control_lateral">
+                <div class="var-select">
+                    <select name="variable" class="form-control" id="exampleFormControlSelect1">
+                        <option >--variable--</option>
+                        <option value="{{ centro }}">Centro Médico</option>
+                        <option value="{{ error }}">Causas de Muerte</option>
+                        <option value="{{ personal }}">Personal Médico</option>
+                        <option value="{{ ubicacion }}">Ubicación</option>
+                        <option value="{{ edad }}">Edad</option>
+                    </select>
+                </div>
+                <div class="dinamic">
 
-        <div class="barra_control_lateral">
-            <div class="var-select">
-                <select class="form-control" id="exampleFormControlSelect1">
-                    <option>--variable--</option>
-                    <option>Hospital</option>
-                    <option>Causas de Muerte</option>
-                    <option>Personal Médico</option>
-                    <option>Ubicación</option>
-                    <option>Edad</option>
-                </select>
+                </div>
+                <div class="opciones">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                        <label class="form-check-label" for="exampleRadios1">
+                            Medidas de tendencia central
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="exampleRadios" id="exampleRadios2" value="option2">
+                        <label class="form-check-label" for="exampleRadios2">
+                            Medidas de dispersión
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="exampleRadios" id="exampleRadios3" value="option3" >
+                        <label class="form-check-label" for="exampleRadios3">
+                            Disabled radio
+                        </label>
+                    </div>
+                </div>
+                <button class="btn boton-analisis-calculo" type="submit">Cálcular</button>
             </div>
-            <div class="opciones">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="exampleRadios" id="exampleRadios1" value="option1" checked>
-                    <label class="form-check-label" for="exampleRadios1">
-                        Medidas de tendencia central
-                    </label>
+        </form>
+            <div class="graphic">
+                <div class="graficos">
+                    <img src="{% static 'img/imagen_de_datos.png' %}" class="img-grafico">
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="exampleRadios" id="exampleRadios2" value="option2">
-                    <label class="form-check-label" for="exampleRadios2">
-                        Medidas de dispersión
-                    </label>
+                <div class="datos">
+                    <ul>
+                        <li name="moda">Moda: {{ moda }}</li>
+                        <li name="mediana">Mediana: </li>
+                        <li name="media">Media: </li>
+                    </ul>
+                    <ul class="medidas-desv">
+                        <li name="desvest">Desviación Estándar: </li>
+                        <li name="coeficiente_var">Coeficiente de Variación: </li>
+                        <li>Rango: </li>
+                    </ul>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="exampleRadios" id="exampleRadios3" value="option3" >
-                    <label class="form-check-label" for="exampleRadios3">
-                        Disabled radio
-                    </label>
-                </div>
+                
             </div>
-        </div>
-        <div class="graphic">
-            {% for dat in data %}
-                <p>{{ dat }}</p>
-            {% endfor %}
-        </div>
     </div>
 
 {% endblock %}

@@ -1,19 +1,247 @@
 from django.shortcuts import render
 from . import models
 
+import pandas as pd
+
 from .service import get_region, get_comuna, cursor, get_centro_medico
 
 
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import ErrorMortal, Paciente, Defuncion
 from .forms import ErrorMortalForm, PacienteForm, DefuncionForm
+from django.apps import apps
 
 # Create your views here.
 
+
+def get_context_analisis(key, dict):
+    modelo= dict.get(key)
+    results= modelo.objects.all()
+    arr=[]
+    context={}
+    total_datos= 0
+    if key== "1":
+        for i in results:
+            dic={
+                'p': i.id_centro_medico,
+                'nombre': i.nombre_centro_med,
+                'direccion': i.direccion_centro_med,
+                'comuna': i.FK_id_comuna.nombre_comuna
+            }
+            arr.append(dic)
+        df= pd.DataFrame(dic, columns=('p', 'nombre', 'direccion', 'comuna'), index=[0])
+        variables= [ 
+                    {
+                    'Titulo': 'NOMBRE',
+                    'Moda': df['nombre'].mode,
+                    'Mediana': 'N/A',
+                    'Media': 'N/A',
+                    'Desvest': 'N/A',
+                    'Coeficiente': 'N/A',
+                    'Rango':'N/A'
+                    }, 
+                    {
+                    'Titulo': 'DIRECCIÓN',
+                    'Moda': 'N/A',
+                    'Mediana': 'N/A',
+                    'Media': 'N/A',
+                    'Desvest': 'N/A',
+                    'Coeficiente': 'N/A',
+                    'Rango':'N/A'
+                    }, 
+                    {
+                    'Titulo': 'COMUNA',
+                    'Moda': df['comuna'].mode,
+                    'Mediana': 'N/A',
+                    'Media': 'N/A',
+                    'Desvest': 'N/A',
+                    'Coeficiente': 'N/A',
+                    'Rango':'N/A'
+                    }
+                    ]
+        context['variables']= variables
+        total_datos= len(arr)
+    elif key=="2":
+        for i in results:
+            dic={
+                'p': i.id_personal_med,
+                'numrut': i.numrut_pers_med,
+                'dvrut' : i.dvrut_pers_med,
+                'p_nombre': i.p_nombre_pers_med,
+                's_nombre': i.s_nombre_pers_med,
+                'appaterno': i.a_paterno_pers_med,
+                'apmaterno': i.a_materno_pers_med,
+                'cargo': i.cargo_pers_med,
+                'edad': i.edad_pers_med,
+                'anios_exp' : i.anios_experiencia,
+                'centro' : i.FK_id_centro_medico
+            }
+            arr.append(dic)
+            df= pd.DataFrame(dic, columns=(
+                'p', 'numrut', 'dvrut', 'p_nombre', 's_nombre', 
+                'appaterno', 'apmaterno', 'cargo', 'edad', 
+                'anios_exp', 'centro')
+                )
+            variables= [ 
+                {
+                'Titulo': 'NUMRUT',
+                'Moda': 'N/A',
+                'Mediana': 'N/A',
+                'Media': 'N/A',
+                'Desvest': 'N/A',
+                'Coeficiente': 'N/A',
+                'Rango':'N/A'
+                }, 
+                {
+                'Titulo': 'DVRUT',
+                'Moda': df['dvrut'].mode,
+                'Mediana': 'N/A',
+                'Media': 'N/A',
+                'Desvest': 'N/A',
+                'Coeficiente': 'N/A',
+                'Rango':'N/A'
+                }, 
+                {
+                'Titulo': 'PRIMER NOMBRE',
+                'Moda': df['p_nombre'].mode,
+                'Mediana': 'N/A',
+                'Media': 'N/A',
+                'Desvest': 'N/A',
+                'Coeficiente': 'N/A',
+                'Rango':'N/A'
+                },
+                {
+                'Titulo': 'SEGUNDO NOMBRE',
+                'Moda': df['s_nombre'].mode,
+                'Mediana': 'N/A',
+                'Media': 'N/A',
+                'Desvest': 'N/A',
+                'Coeficiente': 'N/A',
+                'Rango':'N/A'
+                },
+                {
+                'Titulo': 'PRIMER APELLIDO',
+                'Moda': df['appaterno'].mode,
+                'Mediana': 'N/A',
+                'Media': 'N/A',
+                'Desvest': 'N/A',
+                'Coeficiente': 'N/A',
+                'Rango':'N/A'
+                },
+                {
+                'Titulo': 'SEGUNDO APELLIDO',
+                'Moda': df['apmaterno'].mode,
+                'Mediana': 'N/A',
+                'Media': 'N/A',
+                'Desvest': 'N/A',
+                'Coeficiente': 'N/A',
+                'Rango':'N/A'
+                },
+                {
+                'Titulo': 'CARGO',
+                'Moda': df['cargo'].mode,
+                'Mediana': 'N/A',
+                'Media': 'N/A',
+                'Desvest': 'N/A',
+                'Coeficiente': 'N/A',
+                'Rango':'N/A'
+                },
+                {
+                'Titulo': 'EDAD',
+                'Moda': df['edad'].mode,
+                'Mediana': df['edad'].median,
+                'Media': df['edad'].mean,
+                'Desvest': df['edad'].std,
+                'Coeficiente': (df['edad'].std/ df['edad'].mean),
+                'Rango': df['edad'].max - df['edad'].min
+                },
+                {
+                'Titulo': 'AÑOS DE EXPERIENCIA',
+                'Moda': df['anios_exp'].mode,
+                'Mediana': df['anios_exp'].median,
+                'Media': df['anios_exp'].mean,
+                'Desvest': df['anios_exp'].std,
+                'Coeficiente': (df['anios_exp'].std/ df['anios_exp'].mean),
+                'Rango': df['anios_exp'].max - df['anios_exp'].min
+                },
+                {
+                'Titulo': 'CENTRO MEDICO',
+                'Moda': df['centro'].mode,
+                'Mediana': 'N/A',
+                'Media': 'N/A',
+                'Desvest': 'N/A',
+                'Coeficiente': 'N/A',
+                'Rango':'N/A'
+                },
+                ]
+        total_datos= len(arr)
+    elif key== "3":
+        for i in results:
+            dic={
+                'p': i.id_error_mortal,
+                'descripcion': i.descripcion_error_mortal
+            }
+
+            arr.append(dic)
+        df= pd.DataFrame(dic, columns=('p', 'descripcion'))
+        variables=[
+                {
+                'Titulo': 'CAUSA DE MUERTE',
+                'Moda': df['descripcion'].mode,
+                'Mediana': 'N/A',
+                'Media': 'N/A',
+                'Desvest': 'N/A',
+                'Coeficiente': 'N/A',
+                'Rango':'N/A'
+                },
+                
+        ]
+        total_datos= len(arr)
+        
+
+    elif key== "4":
+        for i in results:
+            dic={
+                'p': i.id_paciente,
+                'numrut': i.numrut_paciente,
+                'dvrut': i.dvrut_paciente,
+                'p_nombre': i.p_nombre_paciente,
+                's_nombre': i.s_nombre_paciente,
+                'appaterno': i.a_paterno_paciente,
+                'apmaterno': i.a_materno_paciente,
+                'edad': i.edad_paciente,
+                'genero': i.genero_paciente,
+                'comuna': i.FK_id_comuna
+            }
+            arr.append(dic)
+        df= pd.DataFrame(dic, columns=(
+            'p', 'numrut', 'dvrut', 'p_nombre', 's_nombre', 
+            'appaterno', 'apmaterno', 'edad', 'genero', 'comuna')
+            )
+        total_datos= len(arr)
+    return context
+
 def analisis(request):
-    if request.method== "GET":
+    if request.method== "POST":
+        variable= request.POST["variable"]
+        modelo_codigo= {
+            "1": models.CentroMedico,
+            "2": models.PersonalMedico,
+            "3": models.ErrorMortal,
+            "4": models.Paciente,
+            "5": [models.Region, models.Comuna],
+             
+        }
+        context= get_context_analisis(variable, modelo_codigo)
+        return render(request, "mortalysis/analisis.html", context)
+    else:
         context={
-            'clase':'analisis'
+            'clase':'analisis',
+            'centro': "1",
+            'personal': "2",
+            'error': "3",
+            'edad': "4",
+            'ubicacion' : "5"
         }
         return render(request, "mortalysis/analisis.html", context)
 
