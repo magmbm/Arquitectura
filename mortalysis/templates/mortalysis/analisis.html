@@ -14,10 +14,10 @@
                     <select name="variable" class="form-control" id="exampleFormControlSelect1">
                         <option >--variable--</option>
                         <option value="{{ centro }}">Centro Médico</option>
-                        <option value="{{ error }}">Causas de Muerte</option>
+                        <option value="{{ error }}">Errores Mortales</option>
                         <option value="{{ personal }}">Personal Médico</option>
                         <option value="{{ ubicacion }}">Ubicación</option>
-                        <option value="{{ edad }}">Edad</option>
+                        <option value="{{ causa }}">Causa de Ingreso</option>
                     </select>
                 </div>
                 <div class="dinamic">
@@ -52,8 +52,8 @@
                 </div>
                 <div class="datos">
                     <ul>
-                        <li name="moda">Moda: {{ moda }}</li>
-                        <li name="mediana">Mediana: </li>
+                        <li name="moda">Moda: {{ variables.0 }}</li>
+                        <li name="mediana">Mediana: {{ total_datos }}</li>
                         <li name="media">Media: </li>
                     </ul>
                     <ul class="medidas-desv">

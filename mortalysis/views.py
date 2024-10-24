@@ -29,11 +29,11 @@ def get_context_analisis(key, dict):
                 'comuna': i.FK_id_comuna.nombre_comuna
             }
             arr.append(dic)
-        df= pd.DataFrame(dic, columns=('p', 'nombre', 'direccion', 'comuna'), index=[0])
+        df= pd.DataFrame(arr, columns=('p', 'nombre', 'direccion', 'comuna'))
         variables= [ 
                     {
                     'Titulo': 'NOMBRE',
-                    'Moda': df['nombre'].mode,
+                    'Moda': df['nombre'].mode(),
                     'Mediana': 'N/A',
                     'Media': 'N/A',
                     'Desvest': 'N/A',
@@ -51,7 +51,7 @@ def get_context_analisis(key, dict):
                     }, 
                     {
                     'Titulo': 'COMUNA',
-                    'Moda': df['comuna'].mode,
+                    'Moda': df['comuna'].mode(),
                     'Mediana': 'N/A',
                     'Media': 'N/A',
                     'Desvest': 'N/A',
@@ -61,6 +61,7 @@ def get_context_analisis(key, dict):
                     ]
         context['variables']= variables
         total_datos= len(arr)
+        context['total_datos']= total_datos
     elif key=="2":
         for i in results:
             dic={
@@ -77,104 +78,106 @@ def get_context_analisis(key, dict):
                 'centro' : i.FK_id_centro_medico
             }
             arr.append(dic)
-            df= pd.DataFrame(dic, columns=(
+        df= pd.DataFrame(arr, columns=(
                 'p', 'numrut', 'dvrut', 'p_nombre', 's_nombre', 
                 'appaterno', 'apmaterno', 'cargo', 'edad', 
                 'anios_exp', 'centro')
                 )
-            variables= [ 
-                {
-                'Titulo': 'NUMRUT',
-                'Moda': 'N/A',
-                'Mediana': 'N/A',
-                'Media': 'N/A',
-                'Desvest': 'N/A',
-                'Coeficiente': 'N/A',
-                'Rango':'N/A'
-                }, 
-                {
-                'Titulo': 'DVRUT',
-                'Moda': df['dvrut'].mode,
-                'Mediana': 'N/A',
-                'Media': 'N/A',
-                'Desvest': 'N/A',
-                'Coeficiente': 'N/A',
-                'Rango':'N/A'
-                }, 
-                {
-                'Titulo': 'PRIMER NOMBRE',
-                'Moda': df['p_nombre'].mode,
-                'Mediana': 'N/A',
-                'Media': 'N/A',
-                'Desvest': 'N/A',
-                'Coeficiente': 'N/A',
-                'Rango':'N/A'
-                },
-                {
-                'Titulo': 'SEGUNDO NOMBRE',
-                'Moda': df['s_nombre'].mode,
-                'Mediana': 'N/A',
-                'Media': 'N/A',
-                'Desvest': 'N/A',
-                'Coeficiente': 'N/A',
-                'Rango':'N/A'
-                },
-                {
-                'Titulo': 'PRIMER APELLIDO',
-                'Moda': df['appaterno'].mode,
-                'Mediana': 'N/A',
-                'Media': 'N/A',
-                'Desvest': 'N/A',
-                'Coeficiente': 'N/A',
-                'Rango':'N/A'
-                },
-                {
-                'Titulo': 'SEGUNDO APELLIDO',
-                'Moda': df['apmaterno'].mode,
-                'Mediana': 'N/A',
-                'Media': 'N/A',
-                'Desvest': 'N/A',
-                'Coeficiente': 'N/A',
-                'Rango':'N/A'
-                },
-                {
-                'Titulo': 'CARGO',
-                'Moda': df['cargo'].mode,
-                'Mediana': 'N/A',
-                'Media': 'N/A',
-                'Desvest': 'N/A',
-                'Coeficiente': 'N/A',
-                'Rango':'N/A'
-                },
-                {
-                'Titulo': 'EDAD',
-                'Moda': df['edad'].mode,
-                'Mediana': df['edad'].median,
-                'Media': df['edad'].mean,
-                'Desvest': df['edad'].std,
-                'Coeficiente': (df['edad'].std/ df['edad'].mean),
-                'Rango': df['edad'].max - df['edad'].min
-                },
-                {
-                'Titulo': 'AÑOS DE EXPERIENCIA',
-                'Moda': df['anios_exp'].mode,
-                'Mediana': df['anios_exp'].median,
-                'Media': df['anios_exp'].mean,
-                'Desvest': df['anios_exp'].std,
-                'Coeficiente': (df['anios_exp'].std/ df['anios_exp'].mean),
-                'Rango': df['anios_exp'].max - df['anios_exp'].min
-                },
-                {
-                'Titulo': 'CENTRO MEDICO',
-                'Moda': df['centro'].mode,
-                'Mediana': 'N/A',
-                'Media': 'N/A',
-                'Desvest': 'N/A',
-                'Coeficiente': 'N/A',
-                'Rango':'N/A'
-                },
-                ]
+        variables= [ 
+            {
+            'Titulo': 'NUMRUT',
+            'Moda': 'N/A',
+            'Mediana': 'N/A',
+            'Media': 'N/A',
+            'Desvest': 'N/A',
+            'Coeficiente': 'N/A',
+            'Rango':'N/A'
+            }, 
+            {
+            'Titulo': 'DVRUT',
+            'Moda': df['dvrut'].mode,
+            'Mediana': 'N/A',
+            'Media': 'N/A',
+            'Desvest': 'N/A',
+            'Coeficiente': 'N/A',
+            'Rango':'N/A'
+            }, 
+            {
+            'Titulo': 'PRIMER NOMBRE',
+            'Moda': df['p_nombre'].mode(),
+            'Mediana': 'N/A',
+            'Media': 'N/A',
+            'Desvest': 'N/A',
+            'Coeficiente': 'N/A',
+            'Rango':'N/A'
+            },
+            {
+            'Titulo': 'SEGUNDO NOMBRE',
+            'Moda': df['s_nombre'].mode,
+            'Mediana': 'N/A',
+            'Media': 'N/A',
+            'Desvest': 'N/A',
+            'Coeficiente': 'N/A',
+            'Rango':'N/A'
+            },
+            {
+            'Titulo': 'PRIMER APELLIDO',
+            'Moda': df['appaterno'].mode(),
+            'Mediana': 'N/A',
+            'Media': 'N/A',
+            'Desvest': 'N/A',
+            'Coeficiente': 'N/A',
+            'Rango':'N/A'
+            },
+            {
+            'Titulo': 'SEGUNDO APELLIDO',
+            'Moda': df['apmaterno'].mode(),
+            'Mediana': 'N/A',
+            'Media': 'N/A',
+            'Desvest': 'N/A',
+            'Coeficiente': 'N/A',
+            'Rango':'N/A'
+            },
+            {
+            'Titulo': 'CARGO',
+            'Moda': df['cargo'].mode(),
+            'Mediana': 'N/A',
+            'Media': 'N/A',
+            'Desvest': 'N/A',
+            'Coeficiente': 'N/A',
+            'Rango':'N/A'
+            },
+            {
+            'Titulo': 'EDAD',
+            'Moda': df['edad'].mode(),
+            'Mediana': df['edad'].median,
+            'Media': df['edad'].mean,
+            'Desvest': df['edad'].std,
+            'Coeficiente': (df['edad'].std/ df['edad'].mean),
+            'Rango': df['edad'].max - df['edad'].min
+            },
+            {
+            'Titulo': 'AÑOS DE EXPERIENCIA',
+            'Moda': df['anios_exp'].mode(),
+            'Mediana': df['anios_exp'].median(),
+            'Media': df['anios_exp'].mean(),
+            'Desvest': df['anios_exp'].std,
+            'Coeficiente': (df['anios_exp'].std/ df['anios_exp'].mean),
+            'Rango': df['anios_exp'].max - df['anios_exp'].min
+            },
+            {
+            'Titulo': 'CENTRO MEDICO',
+            'Moda': df['centro'].mode(),
+            'Mediana': 'N/A',
+            'Media': 'N/A',
+            'Desvest': 'N/A',
+            'Coeficiente': 'N/A',
+            'Rango':'N/A'
+            },
+        ]
+        context['variables']= variables
         total_datos= len(arr)
+        context['total_datos']= total_datos
     elif key== "3":
         for i in results:
             dic={
@@ -183,7 +186,7 @@ def get_context_analisis(key, dict):
             }
 
             arr.append(dic)
-        df= pd.DataFrame(dic, columns=('p', 'descripcion'))
+        df= pd.DataFrame(arr, columns=('p', 'descripcion'))
         variables=[
                 {
                 'Titulo': 'CAUSA DE MUERTE',
@@ -196,29 +199,31 @@ def get_context_analisis(key, dict):
                 },
                 
         ]
+        context['variables']= variables
         total_datos= len(arr)
-        
-
+        context['total_datos']= total_datos
     elif key== "4":
         for i in results:
             dic={
-                'p': i.id_paciente,
-                'numrut': i.numrut_paciente,
-                'dvrut': i.dvrut_paciente,
-                'p_nombre': i.p_nombre_paciente,
-                's_nombre': i.s_nombre_paciente,
-                'appaterno': i.a_paterno_paciente,
-                'apmaterno': i.a_materno_paciente,
-                'edad': i.edad_paciente,
-                'genero': i.genero_paciente,
-                'comuna': i.FK_id_comuna
+                'p': i.id_defuncion,
+                'causa': i.FK_id_causa_ingreso.descripcion_causa_ingreso, 
             }
             arr.append(dic)
-        df= pd.DataFrame(dic, columns=(
-            'p', 'numrut', 'dvrut', 'p_nombre', 's_nombre', 
-            'appaterno', 'apmaterno', 'edad', 'genero', 'comuna')
-            )
+        df= pd.DataFrame(arr, columns=('p', 'causa'))
+        variables=[
+                {
+                'Titulo': 'CAUSA DE INGRESO',
+                'Moda': df['causa'].loc[0],
+                'Mediana': 'N/A',
+                'Media': 'N/A',
+                'Desvest': 'N/A',
+                'Coeficiente': 'N/A',
+                'Rango':'N/A'
+                },
+        ]
+        context['variables']= variables
         total_datos= len(arr)
+        context['total_datos']= total_datos
     return context
 
 def analisis(request):
@@ -227,8 +232,8 @@ def analisis(request):
         modelo_codigo= {
             "1": models.CentroMedico,
             "2": models.PersonalMedico,
-            "3": models.ErrorMortal,
-            "4": models.Paciente,
+            "3": models.Defuncion,
+            "4": models.Defuncion,
             "5": [models.Region, models.Comuna],
              
         }
@@ -240,7 +245,7 @@ def analisis(request):
             'centro': "1",
             'personal': "2",
             'error': "3",
-            'edad': "4",
+            'causa': "4",
             'ubicacion' : "5"
         }
         return render(request, "mortalysis/analisis.html", context)
