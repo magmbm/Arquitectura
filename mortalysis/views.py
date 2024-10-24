@@ -63,7 +63,7 @@ def get_context_analisis(key, dict):
                     'Rango':'N/A'
                     }
                     ]
-        analisis_desc= ('Estos datos fueron calculados con el conjunto de defunciones ' +
+        analisis_desc= ('Estos datos fueron calculados con el conjunto de centros médicos públicos ' +
         'que se encuentran registradas en el sistema. De aquí sabemos que la comuna de '+
         df['comuna'].mode().iloc[0] +' cuanta con la mayor cantidad de Centros Médicos de todo el país.')
 
@@ -217,7 +217,7 @@ def get_context_analisis(key, dict):
                 },
                 
         ]
-        analisis_desc= ('En base a las defunciones registradas, el error conduciente al fallecimiento'
+        analisis_desc= ('En base a las defunciones registradas, el error conducente a la muerte'
         ' del paciente más común a través del país es ' + df['mortal'].mode().iloc[0] + '.')
         context['analisis_desc']= analisis_desc
         context['variables']= variables
@@ -250,37 +250,49 @@ def get_context_analisis(key, dict):
         total_datos= len(arr)
         context['total_datos']= total_datos
     elif key=="5":
+        comuna_dict={}
+        comuna= models.Comuna.objects.all()
+        for c in comuna:
+            comuna_dict[c.id_comuna]= c.nombre_comuna
+        region_dict={}
+        region= models.Region.objects.all()
+        for r in region:
+            region_dict[r.id_region]= r.nombre_region
         for i in results:
             dic={
                 'p': i.id_defuncion,
-                'com': i.FK_id_centro_medico,
-                'reg': i.FK_id_causa_ingreso
+                'com': i.FK_id_centro_medico.FK_id_comuna,
+                'com_m': i.FK_id_centro_medico.FK_id_comuna.id_comuna,
+                'reg': i.FK_id_centro_medico.FK_id_comuna.FK_id_region,
+                'reg_m': i.FK_id_centro_medico.FK_id_comuna.FK_id_region.id_region
             }
             arr.append(dic)
-        df= pd.DataFrame(arr, columns=('p', 'com', 'reg'))
+        df= pd.DataFrame(arr, columns=('p', 'com', 'com_m', 'reg', 'reg_m'))
+        promedio_com= df['com_m'].mean()
+        promedio_reg= df['reg_m'].mean()
         variables=[
             {
                 'Titulo': 'Comuna',
-                'Moda': df['com'].mode(),
+                'Moda': df['com'].mode().iloc[0],
                 'Mediana': 'N/A',
-                'Media': df['com'].mean(),
+                'Media': comuna_dict.get(round(promedio_com)),
                 'Desvest': 'N/A',
                 'Coeficiente': 'N/A',
                 'Rango':'N/A'
             },
             {
                 'Titulo': 'Region',
-                'Moda': df['reg'].mode(),
+                'Moda': df['reg'].mode().iloc[0],
                 'Mediana': 'N/A',
-                'Media': df['reg'].mean(),
+                'Media': region_dict.get(round(promedio_reg)),
                 'Desvest': 'N/A',
                 'Coeficiente': 'N/A',
                 'Rango':'N/A'
             }
         ]
-        analisis_desc= ('Estos datos estan generados en torno a las defunciones, la moda indíca en este caso en' +
-        ' que comunas y regiones se registran más muertes, tomando en cuenta la ubicación del hospital para poder ' +
-        'calcular los datos.')
+        analisis_desc= ('Estos datos estan generados en torno a las defunciones, por lo que la moda indíca en este caso en' +
+        ' que comunas y regiones se registran más muertes, esto se hace tomando en cuenta la ubicación del hospital para poder ' +
+        'calcular los datos y no la ubicación del defunto(a).')
         context['analisis_desc']= analisis_desc
         context['variables']= variables
         total_datos= len(arr)
