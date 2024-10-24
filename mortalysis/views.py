@@ -3,7 +3,7 @@ from . import models
 
 import pandas as pd
 
-from .service import get_region, get_comuna, cursor, get_centro_medico
+#from .service import get_region, get_comuna, cursor, get_centro_medico
 
 
 from django.shortcuts import render, get_object_or_404, redirect
@@ -15,10 +15,14 @@ from django.apps import apps
 
 
 def get_context_analisis(key, dict):
+    #hacer un desvio para el --variable--
     modelo= dict.get(key)
-    results= modelo.objects.all()
-    arr=[]
     context={}
+    if modelo:
+        results= modelo.objects.all()
+    else: 
+        return context
+    arr=[]
     total_datos= 0
     if key== "1":
         for i in results:
@@ -33,7 +37,7 @@ def get_context_analisis(key, dict):
         variables= [ 
                     {
                     'Titulo': 'NOMBRE',
-                    'Moda': df['nombre'].mode(),
+                    'Moda': df['nombre'].mode().iloc[0],
                     'Mediana': 'N/A',
                     'Media': 'N/A',
                     'Desvest': 'N/A',
@@ -51,7 +55,7 @@ def get_context_analisis(key, dict):
                     }, 
                     {
                     'Titulo': 'COMUNA',
-                    'Moda': df['comuna'].mode(),
+                    'Moda': df['comuna'].mode().iloc[0],
                     'Mediana': 'N/A',
                     'Media': 'N/A',
                     'Desvest': 'N/A',
@@ -59,6 +63,11 @@ def get_context_analisis(key, dict):
                     'Rango':'N/A'
                     }
                     ]
+        analisis_desc= ('Estos datos fueron calculados con el conjunto de defunciones ' +
+        'que se encuentran registradas en el sistema. De aquí sabemos que la comuna de '+
+        df['comuna'].mode().iloc[0] +' cuanta con la mayor cantidad de Centros Médicos de todo el país.')
+
+        context['analisis_desc']= analisis_desc
         context['variables']= variables
         total_datos= len(arr)
         context['total_datos']= total_datos
@@ -75,7 +84,7 @@ def get_context_analisis(key, dict):
                 'cargo': i.cargo_pers_med,
                 'edad': i.edad_pers_med,
                 'anios_exp' : i.anios_experiencia,
-                'centro' : i.FK_id_centro_medico
+                'centro' : i.FK_id_centro_medico.nombre_centro_med
             }
             arr.append(dic)
         df= pd.DataFrame(arr, columns=(
@@ -95,7 +104,7 @@ def get_context_analisis(key, dict):
             }, 
             {
             'Titulo': 'DVRUT',
-            'Moda': df['dvrut'].mode,
+            'Moda': df['dvrut'].mode().iloc[0],
             'Mediana': 'N/A',
             'Media': 'N/A',
             'Desvest': 'N/A',
@@ -104,7 +113,7 @@ def get_context_analisis(key, dict):
             }, 
             {
             'Titulo': 'PRIMER NOMBRE',
-            'Moda': df['p_nombre'].mode(),
+            'Moda': df['p_nombre'].mode().iloc[0],
             'Mediana': 'N/A',
             'Media': 'N/A',
             'Desvest': 'N/A',
@@ -113,7 +122,7 @@ def get_context_analisis(key, dict):
             },
             {
             'Titulo': 'SEGUNDO NOMBRE',
-            'Moda': df['s_nombre'].mode,
+            'Moda': df['s_nombre'].mode().iloc[0],
             'Mediana': 'N/A',
             'Media': 'N/A',
             'Desvest': 'N/A',
@@ -122,7 +131,7 @@ def get_context_analisis(key, dict):
             },
             {
             'Titulo': 'PRIMER APELLIDO',
-            'Moda': df['appaterno'].mode(),
+            'Moda': df['appaterno'].mode().iloc[0],
             'Mediana': 'N/A',
             'Media': 'N/A',
             'Desvest': 'N/A',
@@ -131,7 +140,7 @@ def get_context_analisis(key, dict):
             },
             {
             'Titulo': 'SEGUNDO APELLIDO',
-            'Moda': df['apmaterno'].mode(),
+            'Moda': df['apmaterno'].mode().iloc[0],
             'Mediana': 'N/A',
             'Media': 'N/A',
             'Desvest': 'N/A',
@@ -140,7 +149,7 @@ def get_context_analisis(key, dict):
             },
             {
             'Titulo': 'CARGO',
-            'Moda': df['cargo'].mode(),
+            'Moda': df['cargo'].mode().iloc[0],
             'Mediana': 'N/A',
             'Media': 'N/A',
             'Desvest': 'N/A',
@@ -149,25 +158,25 @@ def get_context_analisis(key, dict):
             },
             {
             'Titulo': 'EDAD',
-            'Moda': df['edad'].mode(),
+            'Moda': df['edad'].mode().iloc[0],
             'Mediana': df['edad'].median,
             'Media': df['edad'].mean,
             'Desvest': df['edad'].std,
-            'Coeficiente': (df['edad'].std/ df['edad'].mean),
-            'Rango': df['edad'].max - df['edad'].min
+            'Coeficiente': (df['edad'].std()) / (df['edad'].mean()),
+            'Rango': df['edad'].max() - df['edad'].min()
             },
             {
             'Titulo': 'AÑOS DE EXPERIENCIA',
-            'Moda': df['anios_exp'].mode(),
+            'Moda': df['anios_exp'].mode().iloc[0],
             'Mediana': df['anios_exp'].median(),
             'Media': df['anios_exp'].mean(),
             'Desvest': df['anios_exp'].std,
-            'Coeficiente': (df['anios_exp'].std/ df['anios_exp'].mean),
-            'Rango': df['anios_exp'].max - df['anios_exp'].min
+            'Coeficiente': (df['anios_exp'].std()) / (df['anios_exp'].mean()),
+            'Rango': df['anios_exp'].max() - df['anios_exp'].min()
             },
             {
             'Titulo': 'CENTRO MEDICO',
-            'Moda': df['centro'].mode(),
+            'Moda': df['centro'].mode().iloc[0],
             'Mediana': 'N/A',
             'Media': 'N/A',
             'Desvest': 'N/A',
@@ -175,22 +184,31 @@ def get_context_analisis(key, dict):
             'Rango':'N/A'
             },
         ]
+        promedio= df['anios_exp'].mean()
+        maxima_edad= df['edad'].max()
+        analisis_desc= ('Estos datos fueron calculados en base al personal medico que '+
+        'que se encuentra registrado en el sistema, los cuales nos indincan que la ' +
+        'mayoría de personal médico se encuentra trabajando en ' + df['centro'].mode().iloc[0] +  
+        ', teniendo en promedio '+  str(promedio) +' años de experiencia en sus rubros respectivos' +
+        'y el personal de más edad teniendo ' + str(maxima_edad) + '.')
+        
+        context['analisis_desc']= analisis_desc
         context['variables']= variables
         total_datos= len(arr)
         context['total_datos']= total_datos
     elif key== "3":
         for i in results:
             dic={
-                'p': i.id_error_mortal,
-                'descripcion': i.descripcion_error_mortal
+                'p': i.id_defuncion,
+                'mortal': i.FK_id_error_mortal.descripcion_error_mortal
             }
 
             arr.append(dic)
-        df= pd.DataFrame(arr, columns=('p', 'descripcion'))
+        df= pd.DataFrame(arr, columns=('p', 'mortal'))
         variables=[
                 {
-                'Titulo': 'CAUSA DE MUERTE',
-                'Moda': df['descripcion'].mode,
+                'Titulo': 'ERROR MORTAL',
+                'Moda': df['mortal'].mode().iloc[0],
                 'Mediana': 'N/A',
                 'Media': 'N/A',
                 'Desvest': 'N/A',
@@ -199,6 +217,9 @@ def get_context_analisis(key, dict):
                 },
                 
         ]
+        analisis_desc= ('En base a las defunciones registradas, el error conduciente al fallecimiento'
+        ' del paciente más común a través del país es ' + df['mortal'].mode().iloc[0] + '.')
+        context['analisis_desc']= analisis_desc
         context['variables']= variables
         total_datos= len(arr)
         context['total_datos']= total_datos
@@ -213,7 +234,7 @@ def get_context_analisis(key, dict):
         variables=[
                 {
                 'Titulo': 'CAUSA DE INGRESO',
-                'Moda': df['causa'].loc[0],
+                'Moda': df['causa'].mode().iloc[0],
                 'Mediana': 'N/A',
                 'Media': 'N/A',
                 'Desvest': 'N/A',
@@ -221,6 +242,46 @@ def get_context_analisis(key, dict):
                 'Rango':'N/A'
                 },
         ]
+
+        analisis_desc= ('En base a las defunciones registradas, la causa de ingreso' +
+        ' más común a un centro médico través del país es ' + df['causa'].mode().iloc[0] + '.')
+        context['analisis_desc']= analisis_desc
+        context['variables']= variables
+        total_datos= len(arr)
+        context['total_datos']= total_datos
+    elif key=="5":
+        for i in results:
+            dic={
+                'p': i.id_defuncion,
+                'com': i.FK_id_centro_medico,
+                'reg': i.FK_id_causa_ingreso
+            }
+            arr.append(dic)
+        df= pd.DataFrame(arr, columns=('p', 'com', 'reg'))
+        variables=[
+            {
+                'Titulo': 'Comuna',
+                'Moda': df['com'].mode(),
+                'Mediana': 'N/A',
+                'Media': df['com'].mean(),
+                'Desvest': 'N/A',
+                'Coeficiente': 'N/A',
+                'Rango':'N/A'
+            },
+            {
+                'Titulo': 'Region',
+                'Moda': df['reg'].mode(),
+                'Mediana': 'N/A',
+                'Media': df['reg'].mean(),
+                'Desvest': 'N/A',
+                'Coeficiente': 'N/A',
+                'Rango':'N/A'
+            }
+        ]
+        analisis_desc= ('Estos datos estan generados en torno a las defunciones, la moda indíca en este caso en' +
+        ' que comunas y regiones se registran más muertes, tomando en cuenta la ubicación del hospital para poder ' +
+        'calcular los datos.')
+        context['analisis_desc']= analisis_desc
         context['variables']= variables
         total_datos= len(arr)
         context['total_datos']= total_datos
@@ -234,10 +295,17 @@ def analisis(request):
             "2": models.PersonalMedico,
             "3": models.Defuncion,
             "4": models.Defuncion,
-            "5": [models.Region, models.Comuna],
+            "5": models.Defuncion,
+            "6": False
              
         }
         context= get_context_analisis(variable, modelo_codigo)
+        context['centro']= "1"
+        context['personal']= "2"
+        context['error']= "3"
+        context['causa']= "4"
+        context['ubicacion']="5" 
+        context['vacio']= "6"
         return render(request, "mortalysis/analisis.html", context)
     else:
         context={
@@ -246,16 +314,18 @@ def analisis(request):
             'personal': "2",
             'error': "3",
             'causa': "4",
-            'ubicacion' : "5"
+            'ubicacion' : "5",
+            'vacio': "6"
         }
         return render(request, "mortalysis/analisis.html", context)
 
 def index(request):
     try:
-        get_region()
-        get_comuna()
-        get_centro_medico()
-        cursor.close()
+        #get_region()
+        #get_comuna()
+        #get_centro_medico()
+        #cursor.close()
+        print('simulación de conexión')
     except:
         print("Error")
     context = {

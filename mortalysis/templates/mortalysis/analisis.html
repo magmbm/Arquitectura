@@ -11,8 +11,8 @@
             {% csrf_token %}
             <div class="barra_control_lateral">
                 <div class="var-select">
-                    <select name="variable" class="form-control" id="exampleFormControlSelect1">
-                        <option >--variable--</option>
+                    <select name="variable" class="form-control">
+                        <option value="{{ vacio }}">--variable--</option>
                         <option value="{{ centro }}">Centro Médico</option>
                         <option value="{{ error }}">Errores Mortales</option>
                         <option value="{{ personal }}">Personal Médico</option>
@@ -48,19 +48,32 @@
         </form>
             <div class="graphic">
                 <div class="graficos">
+                    <p class="total_datos"><strong>Total de Datos: </strong> {{ total_datos }}</p>
                     <img src="{% static 'img/imagen_de_datos.png' %}" class="img-grafico">
                 </div>
-                <div class="datos">
-                    <ul>
-                        <li name="moda">Moda: {{ variables.0 }}</li>
-                        <li name="mediana">Mediana: {{ total_datos }}</li>
-                        <li name="media">Media: </li>
-                    </ul>
-                    <ul class="medidas-desv">
-                        <li name="desvest">Desviación Estándar: </li>
-                        <li name="coeficiente_var">Coeficiente de Variación: </li>
-                        <li>Rango: </li>
-                    </ul>
+                <div class="row datos">
+
+                    {% for v in variables %}
+                    <div class="cont-variables">
+
+                        <p class="titulo-variables"><strong>{{ v.Titulo}}</strong> </p>
+                        <ul>
+                            <li name="moda">Moda: {{ v.Moda }}</li>
+                            <li name="mediana">Mediana: {{ v.Mediana }}</li>
+                            <li name="media">Media: {{ v.Media}} </li>
+                        </ul>
+                        <ul class="medidas-desv">
+                            <li name="desvest">Desviación Estándar: {{ v.Desvest }} </li>
+                            <li name="coeficiente_var">Coeficiente de Variación: {{ v.Coeficiente }}</li>
+                            <li name="rango">Rango: {{ v.Rango }} </li>
+                        </ul>
+                        
+                    </div>
+                    {% endfor %}
+                    <div class="analisis-desc">
+                        <h5><strong>Análisis Descriptívo</strong></h5>
+                        {{ analisis_desc }}
+                    </div>
                 </div>
                 
             </div>

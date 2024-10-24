@@ -243,7 +243,7 @@ img {
 }
 
 .barra_control_lateral{
-    height: 100vh;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -293,7 +293,9 @@ img {
 }
 
 .datos{
-    padding: 20px 10px 20px 10px;
+    padding: 20px 5px 20px 5px;
+    margin: 0px;
+    display: flex;
     background-color: lightgrey;
 }
 
@@ -307,4 +309,25 @@ img {
 
 .medidas-desv{
     margin-top: 40px;
+}
+
+.titulo-variables{
+    margin-left: 30px;
+}
+
+.total_datos{
+    display: flex;
+    justify-self: self-start;
+}
+
+.cont-variables{
+    margin-bottom: 40px;
+}
+
+.analisis-desc{
+    background-color: #1E7E7E;
+    padding: 20px;
+    border-radius: 8px;
+    color: white;
+    margin: 10px 20px 10px 20px;
 }

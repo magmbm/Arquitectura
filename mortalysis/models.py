@@ -50,7 +50,7 @@ class PersonalMedico(models.Model):
     a_materno_pers_med = models.CharField(max_length=60, null=False, blank=False)
     cargo_pers_med = models.CharField(max_length=50, null=False, blank=False)
     edad_pers_med = models.IntegerField(null=False, blank=False, default=0)
-    anios_experienca = models.IntegerField(null=False, blank=False, default=0)
+    anios_experiencia = models.IntegerField(null=False, blank=False, default=0)
     FK_id_centro_medico = models.ForeignKey(CentroMedico, on_delete=models.CASCADE, default=1, db_column='id_centro_medico')
 
     def __str__(self):
