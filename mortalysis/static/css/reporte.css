@@ -48,3 +48,8 @@ body{
     display: flex;
     flex-direction: row;
 }
+
+.btn-volver{
+    background-color: #06728B;
+    margin: 10px;
+}

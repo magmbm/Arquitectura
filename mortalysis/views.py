@@ -306,8 +306,11 @@ def get_context_analisis(key, dict):
 
 
 def generar_reporte(request):
-    context= request.session['contexto']
-    return render(request, 'mortalysis/reporte.html', context)
+    if 'btn-volver' in request.GET:
+        return redirect('analisis') 
+    else:
+        context= request.session['contexto']
+        return render(request, 'mortalysis/reporte.html', context)
 
 def analisis(request):
     if request.method== "POST":
