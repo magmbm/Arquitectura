@@ -18,17 +18,6 @@ import pathlib
 
 # Create your views here.
 
-"""
-def reporte(nombre_variable):
-    pathFile= os.path.abspath('templates/reporte.html')
-    html_path= pathlib.Path(pathFile).as_uri()
-    with sync_playwright() as p:
-        browser =p.chromium.launch()
-        page= browser.new_page()
-        page.goto(html_path)
-        page.emulate_media(media= 'screen')
-        page.pdf(path= "/" + nombre_variable + ".pdf")
-"""
 
 def get_context_analisis(key, dict):
     #hacer un desvio para el --variable--
@@ -38,7 +27,6 @@ def get_context_analisis(key, dict):
         results= modelo.objects.all()
     else: 
         return context
-    context["key"]= key
     arr=[]
     total_datos= 0
     if key== "1":
@@ -317,7 +305,7 @@ def get_context_analisis(key, dict):
     return context
 
 
-def reporte(request):
+def generar_reporte(request):
     context= request.session['contexto']
     return render(request, 'mortalysis/reporte.html', context)
 
