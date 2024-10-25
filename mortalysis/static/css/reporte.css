@@ -1,0 +1,50 @@
+body{
+    margin: 0px;
+    border: 0px;
+    padding: 0px;
+}
+
+.header-reporte{
+    background-color: #1E7E7E;
+    width: 100%;
+    margin: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 120px;
+}
+
+.descripcion{
+    background-color: #F89043;
+    color: white;
+    margin: 40px 60px 20px 60px;
+    border-radius: 8px;
+    padding: 4px 15px 10px 15px;
+    
+}
+
+.header-reporte h2{
+    color: white;
+}
+
+.data-cont{
+    margin: 40px 60px 20px 60px;
+    border-radius: 8px;
+    background-color: lightgray;
+    padding: 10px 15px 10px 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    
+}
+
+.titulo-datos{
+    display: flex;
+    justify-self: center;
+}
+
+.var-cont{
+    display: flex;
+    flex-direction: row;
+}

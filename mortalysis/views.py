@@ -1,4 +1,6 @@
 from django.shortcuts import render
+import json
+from playwright.sync_api import sync_playwright
 from . import models
 
 import pandas as pd
@@ -7,12 +9,26 @@ import pandas as pd
 
 
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import ErrorMortal, Paciente, Defuncion
+from .models import ErrorMortal, Paciente, Defuncion, Comuna, Region
 from .forms import ErrorMortalForm, PacienteForm, DefuncionForm
 from django.apps import apps
+import asyncio
+import os
+import pathlib
 
 # Create your views here.
 
+"""
+def reporte(nombre_variable):
+    pathFile= os.path.abspath('templates/reporte.html')
+    html_path= pathlib.Path(pathFile).as_uri()
+    with sync_playwright() as p:
+        browser =p.chromium.launch()
+        page= browser.new_page()
+        page.goto(html_path)
+        page.emulate_media(media= 'screen')
+        page.pdf(path= "/" + nombre_variable + ".pdf")
+"""
 
 def get_context_analisis(key, dict):
     #hacer un desvio para el --variable--
@@ -22,6 +38,7 @@ def get_context_analisis(key, dict):
         results= modelo.objects.all()
     else: 
         return context
+    context["key"]= key
     arr=[]
     total_datos= 0
     if key== "1":
@@ -74,17 +91,17 @@ def get_context_analisis(key, dict):
     elif key=="2":
         for i in results:
             dic={
-                'p': i.id_personal_med,
-                'numrut': i.numrut_pers_med,
+                'p': int(i.id_personal_med),
+                'numrut': int(i.numrut_pers_med),
                 'dvrut' : i.dvrut_pers_med,
                 'p_nombre': i.p_nombre_pers_med,
                 's_nombre': i.s_nombre_pers_med,
                 'appaterno': i.a_paterno_pers_med,
                 'apmaterno': i.a_materno_pers_med,
                 'cargo': i.cargo_pers_med,
-                'edad': i.edad_pers_med,
+                'edad': int(i.edad_pers_med),
                 'anios_exp' : i.anios_experiencia,
-                'centro' : i.FK_id_centro_medico.nombre_centro_med
+                'centro' : str(i.FK_id_centro_medico.nombre_centro_med)
             }
             arr.append(dic)
         df= pd.DataFrame(arr, columns=(
@@ -158,21 +175,21 @@ def get_context_analisis(key, dict):
             },
             {
             'Titulo': 'EDAD',
-            'Moda': df['edad'].mode().iloc[0],
-            'Mediana': df['edad'].median,
-            'Media': df['edad'].mean,
-            'Desvest': df['edad'].std,
-            'Coeficiente': (df['edad'].std()) / (df['edad'].mean()),
-            'Rango': df['edad'].max() - df['edad'].min()
+            'Moda': str(df['edad'].mode().iloc[0]),
+            'Mediana': str(df['edad'].median()),
+            'Media': str(df['edad'].mean()),
+            'Desvest': str(df['edad'].std()),
+            'Coeficiente': str((df['edad'].std()) / (df['edad'].mean())),
+            'Rango': str(df['edad'].max() - df['edad'].min())
             },
             {
             'Titulo': 'AÑOS DE EXPERIENCIA',
-            'Moda': df['anios_exp'].mode().iloc[0],
-            'Mediana': df['anios_exp'].median(),
-            'Media': df['anios_exp'].mean(),
-            'Desvest': df['anios_exp'].std,
-            'Coeficiente': (df['anios_exp'].std()) / (df['anios_exp'].mean()),
-            'Rango': df['anios_exp'].max() - df['anios_exp'].min()
+            'Moda': str(df['anios_exp'].mode().iloc[0]),
+            'Mediana': str(df['anios_exp'].median()),
+            'Media': str(df['anios_exp'].mean()),
+            'Desvest': str(df['anios_exp'].std()),
+            'Coeficiente': str((df['anios_exp'].std()) / (df['anios_exp'].mean())),
+            'Rango': str(df['anios_exp'].max() - df['anios_exp'].min())
             },
             {
             'Titulo': 'CENTRO MEDICO',
@@ -260,11 +277,11 @@ def get_context_analisis(key, dict):
             region_dict[r.id_region]= r.nombre_region
         for i in results:
             dic={
-                'p': i.id_defuncion,
-                'com': i.FK_id_centro_medico.FK_id_comuna,
-                'com_m': i.FK_id_centro_medico.FK_id_comuna.id_comuna,
-                'reg': i.FK_id_centro_medico.FK_id_comuna.FK_id_region,
-                'reg_m': i.FK_id_centro_medico.FK_id_comuna.FK_id_region.id_region
+                'p': int(i.id_defuncion),
+                'com': str(i.FK_id_centro_medico.FK_id_comuna),
+                'com_m': int(i.FK_id_centro_medico.FK_id_comuna.id_comuna),
+                'reg': str(i.FK_id_centro_medico.FK_id_comuna.FK_id_region),
+                'reg_m': int(i.FK_id_centro_medico.FK_id_comuna.FK_id_region.id_region)
             }
             arr.append(dic)
         df= pd.DataFrame(arr, columns=('p', 'com', 'com_m', 'reg', 'reg_m'))
@@ -275,7 +292,7 @@ def get_context_analisis(key, dict):
                 'Titulo': 'Comuna',
                 'Moda': df['com'].mode().iloc[0],
                 'Mediana': 'N/A',
-                'Media': comuna_dict.get(round(promedio_com)),
+                'Media': str(comuna_dict.get(round(promedio_com))),
                 'Desvest': 'N/A',
                 'Coeficiente': 'N/A',
                 'Rango':'N/A'
@@ -284,7 +301,7 @@ def get_context_analisis(key, dict):
                 'Titulo': 'Region',
                 'Moda': df['reg'].mode().iloc[0],
                 'Mediana': 'N/A',
-                'Media': region_dict.get(round(promedio_reg)),
+                'Media': str(region_dict.get(round(promedio_reg))),
                 'Desvest': 'N/A',
                 'Coeficiente': 'N/A',
                 'Rango':'N/A'
@@ -299,26 +316,35 @@ def get_context_analisis(key, dict):
         context['total_datos']= total_datos
     return context
 
+
+def reporte(request):
+    context= request.session['contexto']
+    return render(request, 'mortalysis/reporte.html', context)
+
 def analisis(request):
     if request.method== "POST":
-        variable= request.POST["variable"]
-        modelo_codigo= {
-            "1": models.CentroMedico,
-            "2": models.PersonalMedico,
-            "3": models.Defuncion,
-            "4": models.Defuncion,
-            "5": models.Defuncion,
-            "6": False
-             
-        }
-        context= get_context_analisis(variable, modelo_codigo)
-        context['centro']= "1"
-        context['personal']= "2"
-        context['error']= "3"
-        context['causa']= "4"
-        context['ubicacion']="5" 
-        context['vacio']= "6"
-        return render(request, "mortalysis/analisis.html", context)
+        if 'btn-calc' in request.POST:
+            variable= request.POST["variable"]
+            modelo_codigo= {
+                "1": models.CentroMedico,
+                "2": models.PersonalMedico,
+                "3": models.Defuncion,
+                "4": models.Defuncion,
+                "5": models.Defuncion,
+                "6": False
+                
+            }
+            context= get_context_analisis(variable, modelo_codigo)
+            context['centro']= "1"
+            context['personal']= "2"
+            context['error']= "3"
+            context['causa']= "4"
+            context['ubicacion']="5" 
+            context['vacio']= "6"
+            request.session['contexto']= context 
+            return render(request, "mortalysis/analisis.html", context)
+        elif 'btn-report' in request.POST:
+            return redirect('reporte')
     else:
         context={
             'clase':'analisis',
@@ -329,6 +355,7 @@ def analisis(request):
             'ubicacion' : "5",
             'vacio': "6"
         }
+
         return render(request, "mortalysis/analisis.html", context)
 
 def index(request):

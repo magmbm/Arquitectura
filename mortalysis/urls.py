@@ -16,4 +16,5 @@ urlpatterns= [
     path('defunciones/agregar', views.registrar_defuncion, name='registrar_defuncion'),
     path('defunciones/editar/<int:pk>', views.editar_defuncion, name='editar_defuncion'),
     path('defunciones/eliminar/<int:pk>', views.eliminar_defuncion, name='eliminar_defuncion'),
+    path('reporte', views.reporte, name="reporte")
 ]

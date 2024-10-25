@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'css/reporte.css' %}" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body>
+    <div class="header-reporte">
+        <h2>Reporte de Mortalysis</h2>
+    </div>
+
+    <div class="descripcion">
+        <h3><strong>Análisis Descriptivo</strong></h3>
+        <p>{{ analisis_desc }}</p>
+    </div> 
+
+    <div class="data-cont">
+        <h3 class="titulo-datos"><strong>Datos</strong></h3>
+        <div class="row ">
+        {% for v in variables %}
+            <div class="var-cont">
+                <p ><strong>{{ v.Titulo }}</strong></p>
+                <ul>
+                    <li name="moda">Moda: {{ v.Moda }}</li>
+                    <li name="mediana">Mediana: {{ v.Mediana }}</li>
+                    <li name="media">Media: {{ v.Media}} </li>
+                </ul>
+                <ul class="medidas-desv">
+                    <li name="desvest">Desviación Estándar: {{ v.Desvest }} </li>
+                    <li name="coeficiente_var">Coeficiente de Variación: {{ v.Coeficiente }}</li>
+                    <li name="rango">Rango: {{ v.Rango }} </li>
+                </ul>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
